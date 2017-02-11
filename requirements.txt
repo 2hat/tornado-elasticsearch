@@ -1,2 +1,2 @@
-tornado>4
+tornado>=3.2
 elasticsearch>=2.3
