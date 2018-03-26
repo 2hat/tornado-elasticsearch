@@ -21,6 +21,7 @@ on how to use the API beyond the introduction for how to use with Tornado::
 """
 from elasticsearch.connection.base import Connection
 from elasticsearch import exceptions
+from elasticsearch import VERSION as ELASTICSEARCH_VERSION
 from elasticsearch.client import Elasticsearch
 from elasticsearch.transport import Transport, TransportError
 from elasticsearch.client.utils import query_params, _make_path
@@ -834,10 +835,17 @@ class AsyncElasticsearch(Elasticsearch):
         :arg q: Query in the Lucene query string syntax
         :arg timeout: Explicit operation timeout
         """
-        _, data = yield self.transport.perform_request('POST',
+        if ELASTICSEARCH_VERSION[0] >= 5:
+            op = 'POST'
+            endpoint = '_delete_by_query'
+        else:
+            op = 'DELETE'
+            endpoint = '_query'
+
+        _, data = yield self.transport.perform_request(op,
                                                        _make_path(index,
                                                                   doc_type,
-                                                                  '_delete_by_query'),
+                                                                  endpoint),
                                                        params=params, body=body)
         raise gen.Return(data)
 
