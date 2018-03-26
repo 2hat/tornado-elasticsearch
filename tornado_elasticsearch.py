@@ -834,10 +834,10 @@ class AsyncElasticsearch(Elasticsearch):
         :arg q: Query in the Lucene query string syntax
         :arg timeout: Explicit operation timeout
         """
-        _, data = yield self.transport.perform_request('DELETE',
+        _, data = yield self.transport.perform_request('POST',
                                                        _make_path(index,
                                                                   doc_type,
-                                                                  '_query'),
+                                                                  '_delete_by_query'),
                                                        params=params, body=body)
         raise gen.Return(data)
 

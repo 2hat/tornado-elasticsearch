@@ -1,2 +1,2 @@
 tornado>4
-elasticsearch>=2.3
+elasticsearch>=5.0
